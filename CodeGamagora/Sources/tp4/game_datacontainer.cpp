@@ -101,4 +101,39 @@ bool CreatePlayerRequest::WriteToNetworkData(uu::Writer& writer)
 	return true;
 }
 
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+uu::StringId MoveCharacterRequest::dataContainerId = uu::StringId("MoveCharacterRequest");
+
+//**********************************************************************************************************************
+bool MoveCharacterRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr)
+{	
+
+	if (_ReadDataContainerId(reader) == false) return false;
+
+	if (reader.ReadUInt32(_id) == false) return false;	
+	if (reader.ReadFloat ((uu::f32)_target.x) == false) return false;
+	if (reader.ReadFloat ((uu::f32)_target.y) == false) return false;
+	if (reader.ReadIPEndPoint(_owner) == false) return false;
+
+	Log(LogType::eTrace, LogModule::eDataContainer, true, "MoveCharacterRequest::ReadFromNetworkData _owner=%s\n", _owner.ToString());
+
+	return true;
+}
+
+//**********************************************************************************************************************
+bool MoveCharacterRequest::WriteToNetworkData(uu::Writer& writer)
+{
+	if (_WriteDataContainerId(writer) == false) return false;
+
+	if (writer.WriteUInt32(_id) == false) return false;	
+	if (writer.WriteFloat ((uu::f32)_target.x) == false) return false;
+	if (writer.WriteFloat ((uu::f32)_target.y) == false) return false;
+	if (writer.WriteIPEndPoint(_owner) == false) return false;
+
+	Log(LogType::eTrace, LogModule::eDataContainer, true, "MoveCharacterRequest::WriteToNetworkData _owner=%s\n", _owner.ToString());
+
+	return true;
+}
+
 

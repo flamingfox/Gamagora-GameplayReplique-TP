@@ -18,6 +18,7 @@ DataContainer
 |	|		\____CreatePlayerRequest
 |	|		\____CreateEnemyRequest
 |	\____CreateBombRequest
+\____MoveCharacterRequest
 */
 
 //**********************************************************************************************************************
@@ -82,4 +83,21 @@ public:
 	uu::u32 _coins;
 
 };
+//**********************************************************************************************************************
+class MoveCharacterRequest: public uu::network::DataContainer{
 
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id;
+	uu::Vector2f _target;
+	uu::network::IPEndPoint _owner;
+
+};

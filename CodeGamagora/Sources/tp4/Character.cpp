@@ -44,6 +44,11 @@ uu::network::DataContainer* Character::CreateContainer() const
 }
 
 //**********************************************************************************************************************
+uu::network::DataContainer* Character::MoveContainer() const{
+	return new MoveCharacterRequest();
+}
+
+//**********************************************************************************************************************
 void Character::ReadFromContainer(uu::network::DataContainer const& container)
 {
 	Entity::ReadFromContainer(container);
@@ -261,6 +266,16 @@ void Character::GoTo(float x, float y)
 
 	if (IsMaster())
 	{
+		//TODO
+		uu::network::DataContainer* container = MoveContainer();
+
+		MoveCharacterRequest& data = dynamic_cast<MoveCharacterRequest&>(*container);
+
+		data._id = GetId();
+		data._target = this->_target;
+		data._owner = GetOwner();
+
+		this->BroadcastDataContainerToReplicas(*container);
 		// Send to replica ?
 	}
 }

@@ -57,6 +57,8 @@ public:
 
 	virtual bool IsNear(sf::Vector2f const& point, float distance) const;
 
+	virtual uu::network::DataContainer* MoveContainer() const;
+
 	void GoTo(sf::Vector2f const& point) { GoTo(point.x, point.y); }
 	void GoTo(float x, float y);
 	void Hit(uu::u32 id_attacker, float hit_value);
