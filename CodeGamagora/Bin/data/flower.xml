@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="flower.png">
+    <SubTexture name="idle/Frame00" x="0" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame01" x="0" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame02" x="18" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame03" x="18" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame04" x="38" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame05" x="38" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame06" x="58" y="0" width="18" height="18" />
+    <SubTexture name="idle/Frame07" x="58" y="0" width="18" height="18" />
+</TextureAtlas>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="bomb.png">
+    <SubTexture name="idle/Frame00" x="0" y="0" width="32" height="32" />
+    <SubTexture name="idle/Frame01" x="32" y="0" width="32" height="32" />
+    <SubTexture name="idle/Frame02" x="64" y="0" width="32" height="32" />
+</TextureAtlas>
