@@ -773,7 +773,7 @@ bool Game::OnNetworkData(uu::u32 dataContainerId, void* bytes, int size, uu::net
 
 	if(MoveCharacterRequest::dataContainerId == dataContainerId)
 	{
-		_OnMoveAnimableRequest(bytes, size, from_addr);
+		_OnMoveCharacterRequest(bytes, size, from_addr);
 		return true;
 	}	
 
@@ -828,23 +828,24 @@ void Game::_OnCreatePlayerRequest(void* bytes, int size, uu::network::IPEndPoint
 }
 
 //**********************************************************************************************************************
-void Game::_OnMoveAnimableRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr){
+/**déplace un personnage */
+void Game::_OnMoveCharacterRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr){
 	Log(LogType::eTrace, LogModule::eGame, true, "MoveAnimableRequest received from %s\n", from_addr.ToString());
 
 	uu::Reader reader(bytes, size, uu::Endianness::eNetworkEndian);
 	MoveCharacterRequest request;
 
-	if (request.ReadFromNetworkData(reader, from_addr) == false)
+	if (request.ReadFromNetworkData(reader, from_addr) == false)	//récupérer les informations de destination et l'id d'un personnage
 	{
 		Log(LogType::eError, LogModule::eGame, true, "unable to read datacontainer CreatePlayerRequest\n");
 		return;
 	}	
 
-	Character* character = dynamic_cast<Character*>(GetEntity(request._id));
+	Character* character = dynamic_cast<Character*>(GetEntity(request._id));	//pointer le personnage avec le bon id
 
 	if (character != nullptr)
 	{
-		character->GoTo(request._target);
+		character->GoTo(request._target);	//déplacer le personnage vers la destination récupérée dant la requête
 	}
 }
 

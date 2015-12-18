@@ -271,10 +271,12 @@ void Character::GoTo(float x, float y)
 
 		MoveCharacterRequest& data = dynamic_cast<MoveCharacterRequest&>(*container);
 
+		//on enregistre l'id et la destination du Character dans un container de mouvement
 		data._id = GetId();
 		data._target = this->_target;
 		data._owner = GetOwner();
 
+		//on envoie le container au serveur pour que tout le monde puisse savoir où le personnage doit se déplacer.
 		this->BroadcastDataContainerToReplicas(*container);
 		// Send to replica ?
 	}
