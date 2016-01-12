@@ -1285,6 +1285,12 @@ void Game::DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerID)
 	request._x = position.x;
 	request._y = position.y;
 
+	//request._idPlayer = playerID;
+	request._current_radius = bomb._current_radius;
+	request._explosion_radius = bomb._explosion_radius;
+	request._power = bomb._power;
+	request._timeStampExplode = uu::Time::GetSynchTime() + 4000;
+
 	SendDataContainerToSessionClients(request);
 }
 
