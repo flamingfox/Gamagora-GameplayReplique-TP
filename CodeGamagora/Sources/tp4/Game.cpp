@@ -899,20 +899,6 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 		return;
 	}
 
-	Character* entity = dynamic_cast<Character*>(GetEntity(request._id_attacker));
-	if (entity != nullptr)
-	{
-		entity->Attack(request._id_to_attack);
-	}
-}
-
-//**********************************************************************************************************************
-void Game::_OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr)
-{
-	Log(LogType::eTrace, LogModule::eGame, true, "HitObjectRequest received from %s\n", from_addr.ToString());
-	
-	uu::StringId const& type = GetKnownType(request._type);
-	
 	Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request.playerId));
 
 	Bomb* bomb = enemyPlayer->SpawnLocalBomb();
@@ -934,6 +920,8 @@ void Game::_OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint co
 		entity->SetPosition(request._x, request._y);
 	}
 	*/
+
+	
 }
 
 //**********************************************************************************************************************
