@@ -13,29 +13,12 @@ Bomb::Bomb() : Item("Bomb"),
 {
 	_current_radius = 10.f;
 	_explosion_radius = 150.f;
-	_explosion_time = uu::Time::GetSynchTime() + 4000; // TEMP : fix that for network latency handling
+	_explosion_time = uu::Time::GetSynchTime() + 4000;
 
 	_label.SetFontSize(14);
 	_label.SetStyle(sf::Text::Bold);
 
 	_SetState(ticks);
-}
-
-uu::network::DataContainer* Bomb::CreateContainer() const
-{
-	return NULL;
-}
-
-void Bomb::ReadFromContainer(uu::network::DataContainer const& container)
-{
-	Item::ReadFromContainer(container);
-	
-}
-
-void Bomb::WriteToContainer(uu::network::DataContainer& container) const
-{
-	Item::WriteToContainer(container);
-	
 }
 
 bool Bomb::_SetState(State new_state)

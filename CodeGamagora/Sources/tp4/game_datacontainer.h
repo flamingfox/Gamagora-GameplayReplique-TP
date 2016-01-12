@@ -10,6 +10,7 @@
 
 //**********************************************************************************************************************
 /*
+
 DataContainer hierachy:
 
 DataContainer
@@ -18,7 +19,11 @@ DataContainer
 |	|		\____CreatePlayerRequest
 |	|		\____CreateEnemyRequest
 |	\____CreateBombRequest
-\____MoveCharacterRequest
+\____GotoObjectRequest
+\____FollowObjectRequest
+\____AttackObjectRequest
+\____HitObjectRequest
+
 */
 
 //**********************************************************************************************************************
@@ -80,12 +85,30 @@ public:
 	virtual bool WriteToNetworkData(uu::Writer& writer);
 
 public:
+	uu::u32 _bomb_id;
+	uu::u32 _enemy_id;
 	uu::u32 _coins;
 
 };
-//**********************************************************************************************************************
-class MoveCharacterRequest: public uu::network::DataContainer{
 
+//**********************************************************************************************************************
+class CreateEnemyRequest: public CreateCharacterRequest
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+
+};
+
+class CreateBombRequest: public uu::network::DataContainer
+{
 public:
 	static uu::StringId dataContainerId;
 
@@ -97,7 +120,84 @@ public:
 
 public:
 	uu::u32 _id;
-	uu::Vector2f _target;
-	uu::network::IPEndPoint _owner;
+	float _x;
+	float _y;
 
+	time_t _timeStampExplode;
+	
+	uu::u16 _state;
+	float _explosion_radius;
+	float _current_radius;
+	float _power;
+	uu::u32 _idPlayer;
+};
+
+//**********************************************************************************************************************
+class GotoObjectRequest: public uu::network::DataContainer
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id;
+	float _x;
+	float _y;
+};
+
+//**********************************************************************************************************************
+class FollowObjectRequest: public uu::network::DataContainer
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id;
+	uu::u32 _id_to_follow;
+};
+
+//**********************************************************************************************************************
+class AttackObjectRequest: public uu::network::DataContainer
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id_attacker;
+	uu::u32 _id_to_attack;
+};
+
+//**********************************************************************************************************************
+class HitObjectRequest: public uu::network::DataContainer
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id_attacker;
+	uu::u32 _id_to_hit;
+	float _hit_value;
 };

@@ -5,6 +5,8 @@
 
 //**********************************************************************************************************************
 Player::Player(const char* name) : Character(name),
+	_bomb_id(0),
+	_enemy_id(0),
 	_coins(0)
 {
 }
@@ -20,6 +22,8 @@ void Player::ReadFromContainer(uu::network::DataContainer const& container)
 
 	CreatePlayerRequest const& data = dynamic_cast<CreatePlayerRequest const&>(container);
 
+	_bomb_id = data._bomb_id;
+	_enemy_id = data._enemy_id;
 	_coins = data._coins;
 }
 
@@ -29,6 +33,8 @@ void Player::WriteToContainer(uu::network::DataContainer& container) const
 
 	CreatePlayerRequest& data = dynamic_cast<CreatePlayerRequest&>(container);
 
+	data._bomb_id = _bomb_id;
+	data._enemy_id = _enemy_id;
 	data._coins = _coins;
 }
 
@@ -102,10 +108,10 @@ Bomb* Player::SpawnLocalBomb()
 
 	if (_bomb_id != 0)
 	{
-		bomb = dynamic_cast<Bomb*>(Game::GetInstance().GetEntity(_bomb_id));
+		bomb = dynamic_cast<Bomb*>(Game::GetInstance().GetEntity(_bomb_id));	//on recherche une bombe du joueur sur le terrain 
 	}
 
-	if (bomb == nullptr)
+	if (bomb == nullptr)	//s'il n'y a pas de bombe sur le terrain, on peut en créer une.
 	{
 		_bomb_id = 0;
 
@@ -115,7 +121,13 @@ Bomb* Player::SpawnLocalBomb()
 		{
 			_bomb_id = bomb->GetId();
 			bomb->SetPosition(_position);
-		}
+
+			//ici, on envoie la bombe sur le réseau
+			if (IsMaster())
+			{
+				Game::GetInstance().DispatchLocalEntityCreateBomb(*bomb, this->GetId());
+			}
+        }
 	}
 
 	return bomb;
@@ -124,6 +136,7 @@ Bomb* Player::SpawnLocalBomb()
 //**********************************************************************************************************************
 MageBlue::MageBlue() : Player("MageBlue")
 {
+	_init_values._attack_range = 80.f;
 }
 
 //**********************************************************************************************************************
