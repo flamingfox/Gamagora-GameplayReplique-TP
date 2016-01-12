@@ -1280,7 +1280,6 @@ void Game::DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerID)
 	if (bomb.IsMaster() == false)
 	return;
 
-	sf::Vector2f position;
 	CreateBombRequest request;
 	request._id = bomb._id;
 	request._x = position.x;
