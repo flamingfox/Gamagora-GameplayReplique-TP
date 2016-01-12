@@ -108,7 +108,6 @@ public:
 };
 
 //**********************************************************************************************************************
-
 class CreateBombRequest: public uu::network::DataContainer
 {
 public:
@@ -127,7 +126,6 @@ public:
 	
 	time_t _timeStampExplode;
 	
-	uu::u16 _state;
 	float _explosion_radius;
 	float _current_radius;
 	float _power;

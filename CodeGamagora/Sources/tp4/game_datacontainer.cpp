@@ -154,8 +154,6 @@ bool CreateBombRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPE
 	
 	if (reader.ReadUInt64((uu::u64&)_timeStampExplode) == false) return false;
 
-	
-	if (reader.ReadUInt16(_state) == false) return false;
 	if (reader.ReadFloat(_explosion_radius) == false) return false;
 	if (reader.ReadFloat(_current_radius) == false) return false;
 	if (reader.ReadFloat(_power) == false) return false;
@@ -177,7 +175,6 @@ bool CreateBombRequest::WriteToNetworkData(uu::Writer& writer)
 
 	if (writer.WriteUInt64(_timeStampExplode) == false) return false;
 	
-	if (writer.WriteUInt16(_state) == false) return false;
 	if (writer.WriteFloat(_explosion_radius) == false) return false;
 	if (writer.WriteFloat(_current_radius) == false) return false;
 	if (writer.WriteFloat(_power) == false) return false;
