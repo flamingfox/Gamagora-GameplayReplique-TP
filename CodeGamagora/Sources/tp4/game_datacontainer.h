@@ -108,18 +108,6 @@ public:
 };
 
 //**********************************************************************************************************************
-class GotoObjectRequest: public uu::network::DataContainer
-{
-public:
-	//uu::network::DataContainer overrides
-	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
-	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
-	virtual bool WriteToNetworkData(uu::Writer& writer);
-
-public:
-
-};
-
 class CreateBombRequest: public uu::network::DataContainer
 {
 public:
@@ -138,7 +126,6 @@ public:
 	
 	time_t _timeStampExplode;
 	
-	uu::u16 _state;
 	float _explosion_radius;
 	float _current_radius;
 	float _power;
