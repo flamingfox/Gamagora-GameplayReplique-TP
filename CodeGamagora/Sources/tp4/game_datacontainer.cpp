@@ -152,7 +152,7 @@ bool CreateBombRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPE
 	if (reader.ReadFloat(_x) == false) return false;
 	if (reader.ReadFloat(_y) == false) return false;
 	
-	if (reader.ReadUInt64((uu::u64)_timeStampExplode) == false) return false;
+	if (reader.ReadUInt64((uu::u64&)_timeStampExplode) == false) return false;
 
 	
 	if (reader.ReadUInt16(_state) == false) return false;

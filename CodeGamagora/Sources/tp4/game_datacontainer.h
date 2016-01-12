@@ -108,17 +108,6 @@ public:
 };
 
 //**********************************************************************************************************************
-class GotoObjectRequest: public uu::network::DataContainer
-{
-public:
-	//uu::network::DataContainer overrides
-	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
-	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
-	virtual bool WriteToNetworkData(uu::Writer& writer);
-
-public:
-
-};
 
 class CreateBombRequest: public uu::network::DataContainer
 {

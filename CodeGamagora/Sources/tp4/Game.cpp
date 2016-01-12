@@ -899,17 +899,16 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 		return;
 	}
 
-	Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request.playerId));
+	Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request._idPlayer));
 
 	Bomb* bomb = enemyPlayer->SpawnLocalBomb();
 
 
-	bomb->SetPosition(bombPosition);
-	bomb->_state = BombState;
-	bomb->_explosion_time = bombExplosionTime;
-	bomb->_explosion_radius = bombExplosionRadius;	
-	bomb->_power = bombPower;
-
+	bomb->SetPosition(request._x, request._y);
+	//bomb->_state = BombState;
+	bomb->_explosion_time = request._timeStampExplode;
+	bomb->_explosion_radius = request._explosion_radius;	
+	bomb->_power = request._power;
 
 	/*
 
@@ -1274,15 +1273,17 @@ void Game::DispatchLocalEntityHit(Character const& character, uu::u32 attacker, 
 
 void Game::DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerID)
 {
-	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityCreateBomb(%f,%f): bomb=%s\n", bomb.GetPosition().x, bomb.GetPosition().y, bomb.ToString());
+	sf::Vector2f position;
+	bomb.GetPosition(position);
+	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityCreateBomb(%f,%f): bomb=%s\n", position.x, position.y, bomb.ToString());
 
 	if (bomb.IsMaster() == false)
 	return;
 
-	CreateBombObjectRequest request;
+	CreateBombRequest request;
 	request._id = bomb._id;
-	request._x = bomb.GetPosition().x;
-	request._y = bomb.GetPosition().y;
+	request._x = position.x;
+	request._y = position.y;
 
 	SendDataContainerToSessionClients(request);
 }
