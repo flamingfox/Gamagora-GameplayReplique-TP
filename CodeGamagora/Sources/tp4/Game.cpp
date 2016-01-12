@@ -785,7 +785,6 @@ bool Game::OnNetworkData(uu::u32 dataContainerId, void* bytes, int size, uu::net
 		_OnCreateBombRequest(bytes, size, from_addr);
 		return true;
 	}
-
 	if (GotoObjectRequest::dataContainerId == dataContainerId)
 	{
 		_OnGotoObjectRequest(bytes, size, from_addr);
@@ -898,8 +897,19 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 	{
 		Log(LogType::eError, LogModule::eGame, true, "unable to read datacontainer CreateBombRequest\n");
 		return;
-	}	
+	}
 
+	Character* entity = dynamic_cast<Character*>(GetEntity(request._id_attacker));
+	if (entity != nullptr)
+	{
+		entity->Attack(request._id_to_attack);
+	}
+}
+
+//**********************************************************************************************************************
+void Game::_OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr)
+{
+	Log(LogType::eTrace, LogModule::eGame, true, "HitObjectRequest received from %s\n", from_addr.ToString());
 	
 	uu::StringId const& type = GetKnownType(request._type);
 	
@@ -1226,7 +1236,6 @@ void Game::DispatchLocalEntityGoTo(Character const& character, sf::Vector2f cons
 
 	SendDataContainerToSessionClients(request);
 }
-
 //**********************************************************************************************************************
 void Game::DispatchLocalEntityFollow(Character const& character, uu::u32 id_to_follow)
 {
@@ -1269,6 +1278,23 @@ void Game::DispatchLocalEntityHit(Character const& character, uu::u32 attacker, 
 	request._id_attacker = attacker;
 	request._id_to_hit = character._id;
 	request._hit_value = hit_value;
+
+	SendDataContainerToSessionClients(request);
+}
+
+//**********************************************************************************************************************
+
+void Game::DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerID)
+{
+	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityCreateBomb(%f,%f): bomb=%s\n", bomb.GetPosition().x, bomb.GetPosition().y, bomb.ToString());
+
+	if (bomb.IsMaster() == false)
+	return;
+
+	CreateBombObjectRequest request;
+	request._id = bomb._id;
+	request._x = bomb.GetPosition().x;
+	request._y = bomb.GetPosition().y;
 
 	SendDataContainerToSessionClients(request);
 }

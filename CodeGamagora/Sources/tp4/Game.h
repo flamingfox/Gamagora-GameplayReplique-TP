@@ -66,6 +66,13 @@ public:
 	void DispatchLocalEntityAttack(Character const& character, uu::u32 id_to_attack);
 	void DispatchLocalEntityHit(Character const& character, uu::u32 attacker, float hit_value);
 
+	/////////////////////////////////////////////////////////Ajout//////////////////////////////////////////////////////////////////////
+	void DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerId);
+
+
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	void DispatchLocalEntitiesToClient(SessionClient const& client);
 	void DispatchCreateEntityToClient(Entity const& entity, SessionClient const& client);
 	void DispatchCreateEntityToSessionClients(Entity const& entity);
@@ -100,7 +107,7 @@ protected:
 	void _OnCreateEntityRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnCreatePlayerRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnCreateEnemyRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
-	void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
+	void _OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnGotoObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnFollowObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnAttackObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);

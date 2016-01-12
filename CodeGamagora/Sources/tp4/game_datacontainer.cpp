@@ -141,6 +141,54 @@ bool CreateEnemyRequest::WriteToNetworkData(uu::Writer& writer)
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
+uu::StringId CreateBombRequest::dataContainerId = uu::StringId("CreateBombRequest");
+
+//**********************************************************************************************************************
+bool CreateBombRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr)
+{
+	if (_ReadDataContainerId(reader) == false) return false;
+
+	if (reader.ReadUInt32(_id) == false) return false;
+	if (reader.ReadFloat(_x) == false) return false;
+	if (reader.ReadFloat(_y) == false) return false;
+	
+	if (reader.ReadUInt64((uu::u64)_timeStampExplode) == false) return false;
+
+	
+	if (reader.ReadUInt16(_state) == false) return false;
+	if (reader.ReadFloat(_explosion_radius) == false) return false;
+	if (reader.ReadFloat(_current_radius) == false) return false;
+	if (reader.ReadFloat(_power) == false) return false;
+
+	if (reader.ReadUInt32(_idPlayer) == false) return false;
+
+	return true;
+}
+
+//**********************************************************************************************************************
+bool CreateBombRequest::WriteToNetworkData(uu::Writer& writer)
+{
+	if (_WriteDataContainerId(writer) == false) return false;
+
+	if (writer.WriteUInt32(_id) == false) return false;
+	if (writer.WriteFloat(_x) == false) return false;
+	if (writer.WriteFloat(_y) == false) return false;
+
+
+	if (writer.WriteUInt64(_timeStampExplode) == false) return false;
+	
+	if (writer.WriteUInt16(_state) == false) return false;
+	if (writer.WriteFloat(_explosion_radius) == false) return false;
+	if (writer.WriteFloat(_current_radius) == false) return false;
+	if (writer.WriteFloat(_power) == false) return false;
+
+	if (writer.WriteUInt32(_idPlayer) == false) return false;
+
+	return true;
+}
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 uu::StringId GotoObjectRequest::dataContainerId = uu::StringId("GotoObjectRequest");
 
 //**********************************************************************************************************************
@@ -214,6 +262,7 @@ bool AttackObjectRequest::WriteToNetworkData(uu::Writer& writer)
 	if (_WriteDataContainerId(writer) == false) return false;
 
 	if (writer.WriteUInt32(_id_attacker) == false) return false;
+	
 	if (writer.WriteUInt32(_id_to_attack) == false) return false;
 
 	return true;
