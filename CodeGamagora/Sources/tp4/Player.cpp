@@ -126,7 +126,7 @@ Bomb* Player::SpawnLocalBomb()
 			{
 				Game::GetInstance().DispatchLocalEntityCreateBomb(*bomb, this->GetId());
 			}
-        	}
+        }
 	}
 
 	return bomb;

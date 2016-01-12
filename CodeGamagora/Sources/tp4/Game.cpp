@@ -899,9 +899,11 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 		return;
 	}
 
-	Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request._idPlayer));
+	Bomb* bomb = dynamic_cast<Bomb*>(Game::GetInstance().CreateLocalEntity(Bomb::type, "bomb"));
 
-	Bomb* bomb = enemyPlayer->SpawnLocalBomb();
+	//Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request._idPlayer));
+
+	//Bomb* bomb = enemyPlayer->SpawnLocalBomb();
 
 
 	bomb->SetPosition(request._x, request._y);
