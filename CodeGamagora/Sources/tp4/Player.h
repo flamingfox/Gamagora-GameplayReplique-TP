@@ -27,6 +27,7 @@ public:
 	void    InvokeLocalCreature();
 	Bomb*   SpawnLocalBomb();
 	void	addScore(float gain);
+	float	getScore() const { return _score; }
 
 protected:
 	uu::u32 _bomb_id;

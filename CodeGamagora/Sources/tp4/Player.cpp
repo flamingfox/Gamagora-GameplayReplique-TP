@@ -7,7 +7,8 @@
 Player::Player(const char* name) : Character(name),
 	_bomb_id(0),
 	_enemy_id(0),
-	_coins(0)
+	_coins(0),
+	_score(0)
 {
 }
 
@@ -71,7 +72,7 @@ bool Player::Update(time_t time_now)
 		list.clear();
 	}
 
-	_label.SetText("%s:  live=%lu  coins=%lu", _name.c_str(), (uu::u32)_current_values._live, _coins);
+	_label.SetText("%s:  live=%lu  coins=%lu  score=%f", _name.c_str(), (uu::u32)_current_values._live, _coins, _score);
 
 	return Character::Update(time_now);
 }
@@ -120,6 +121,7 @@ Bomb* Player::SpawnLocalBomb()
 		if (bomb != nullptr)
 		{
 			_bomb_id = bomb->GetId();
+			bomb->idPlayer = _id;
 			bomb->SetPosition(_position);
 
 			Game::GetInstance().DispatchCreateEntityToSessionClients(*bomb);

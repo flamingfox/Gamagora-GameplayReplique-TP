@@ -350,11 +350,6 @@ bool Game::Initialize()
 
 	_damageManager = nullptr;
 
-	if(GetLocalSessionClient().IsHost()){
-		_damageManager = new DamageManager();
-		_entities.push_back(_damageManager);
-	}
-
 	return true;
 }
 
@@ -1029,10 +1024,20 @@ void Game::_OnScoreObjectRequest(void* bytes, int size, uu::network::IPEndPoint 
 		return;
 	}
 
-	Player* entity = dynamic_cast<Player*>(GetEntity(request._id_attacker));
+	uu::u32 idAttacker = request._id_attacker;
+
+	Bomb* bomb = dynamic_cast<Bomb*>(GetEntity(idAttacker));
+	if (bomb != nullptr){
+		idAttacker = bomb->idPlayer;
+	}
+
+	Player* entity = dynamic_cast<Player*>(GetEntity(idAttacker));
 	if (entity != nullptr)
 	{
 		entity->addScore(request._score_value);
+		if(entity->IsMaster()){
+			Log(LogType::eError, LogModule::eGame, true, "\n\n\n\n\n !!!!! Your score is %f !!!!! \n\n\n\n\n", entity->getScore());
+		}
 	}
 }
 
@@ -1043,6 +1048,10 @@ void Game::_OnUI(Widget& widget, sf::Event::MouseButtonEvent const& event)
 
 	if (&widget == &_create_session_button)
 	{
+		// ici on crée la session et on est le host		
+		_damageManager = new DamageManager();
+		_entities.push_back(_damageManager);
+
 		clean = _session_service.CreateSession();
 	}
 	else
@@ -1280,10 +1289,12 @@ void Game::DispatchLocalEntityHit(Character const& character, uu::u32 attacker, 
 {
 	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityAttack(%lu): character=%s\n", attacker, character.ToString());
 
+	/*
 	if (character.IsMaster() == false)
-		return;
+		return;*/
 
 	HitObjectRequest request;
+
 	request._id_attacker = attacker;
 	request._id_to_hit = character._id;
 	request._hit_value = hit_value;

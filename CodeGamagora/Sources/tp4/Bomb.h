@@ -40,6 +40,7 @@ public:
 	float _explosion_radius;
 	float _current_radius;
 	float _power;
+	uu::u32 idPlayer;
 
 protected:
 	bool _SetState(State new_state);
