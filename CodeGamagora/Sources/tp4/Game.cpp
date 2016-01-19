@@ -780,11 +780,12 @@ bool Game::OnNetworkData(uu::u32 dataContainerId, void* bytes, int size, uu::net
 		return true;
 	}
 
-	if(CreateBombRequest::dataContainerId == dataContainerId)
+	if (CreateBombRequest::dataContainerId == dataContainerId)
 	{
 		_OnCreateBombRequest(bytes, size, from_addr);
 		return true;
 	}
+
 	if (GotoObjectRequest::dataContainerId == dataContainerId)
 	{
 		_OnGotoObjectRequest(bytes, size, from_addr);
@@ -899,20 +900,7 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 		return;
 	}
 
-	Bomb* bomb = dynamic_cast<Bomb*>(Game::GetInstance().CreateLocalEntity(Bomb::type, "bomb"));
-
-	//Player* enemyPlayer = dynamic_cast<Player*> (GetEntity(request._idPlayer));
-
-	//Bomb* bomb = enemyPlayer->SpawnLocalBomb();
-
-
-	bomb->SetPosition(request._x, request._y);
-	//bomb->_state = BombState;
-	bomb->_explosion_time = request._timeStampExplode;
-	bomb->_explosion_radius = request._explosion_radius;	
-	bomb->_power = request._power;
-
-	/*
+	uu::StringId const& type = GetKnownType(request._type);
 
 	Entity* entity = CreateNetworkEntity(type, request._name, request._id, request._owner);
 	if (entity != nullptr)
@@ -920,9 +908,6 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 		entity->ReadFromContainer(request);
 		entity->SetPosition(request._x, request._y);
 	}
-	*/
-
-	
 }
 
 //**********************************************************************************************************************
@@ -1225,6 +1210,7 @@ void Game::DispatchLocalEntityGoTo(Character const& character, sf::Vector2f cons
 
 	SendDataContainerToSessionClients(request);
 }
+
 //**********************************************************************************************************************
 void Game::DispatchLocalEntityFollow(Character const& character, uu::u32 id_to_follow)
 {
@@ -1267,31 +1253,6 @@ void Game::DispatchLocalEntityHit(Character const& character, uu::u32 attacker, 
 	request._id_attacker = attacker;
 	request._id_to_hit = character._id;
 	request._hit_value = hit_value;
-
-	SendDataContainerToSessionClients(request);
-}
-
-//**********************************************************************************************************************
-
-void Game::DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerID)
-{
-	sf::Vector2f position;
-	bomb.GetPosition(position);
-	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityCreateBomb(%f,%f): bomb=%s\n", position.x, position.y, bomb.ToString());
-
-	if (bomb.IsMaster() == false)
-	return;
-
-	CreateBombRequest request;
-	request._id = bomb._id;
-	request._x = position.x;
-	request._y = position.y;
-
-	//request._idPlayer = playerID;
-	request._current_radius = bomb._current_radius;
-	request._explosion_radius = bomb._explosion_radius;
-	request._power = bomb._power;
-	request._timeStampExplode = uu::Time::GetSynchTime() + 4000;
 
 	SendDataContainerToSessionClients(request);
 }

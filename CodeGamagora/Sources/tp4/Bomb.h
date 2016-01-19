@@ -11,6 +11,7 @@ public:
 	static uu::StringId type;
 	virtual uu::StringId const& GetType() const { return type; }
 	virtual bool IsA(uu::StringId const& type) const { if (this->type == type) return true; return Item::IsA(type); }
+	virtual uu::network::DataContainer* CreateContainer() const;
 
 public:
 	enum State
@@ -46,4 +47,8 @@ protected:
 	void _RefreshTicks(time_t time_now);
 	void _RefreshExplode(time_t time_now);
 	void _RefreshDead(time_t time_now);
+
+	//Entity overrides
+	virtual void ReadFromContainer(uu::network::DataContainer const& container);
+	virtual void WriteToContainer(uu::network::DataContainer& container) const;
 };

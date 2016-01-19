@@ -108,7 +108,7 @@ public:
 };
 
 //**********************************************************************************************************************
-class CreateBombRequest: public uu::network::DataContainer
+class CreateBombRequest: public CreateEntityRequest
 {
 public:
 	static uu::StringId dataContainerId;
@@ -120,16 +120,11 @@ public:
 	virtual bool WriteToNetworkData(uu::Writer& writer);
 
 public:
-	uu::u32 _id;
-	float _x;
-	float _y;
-	
-	time_t _timeStampExplode;
-	
+	time_t _explosion_time;
 	float _explosion_radius;
 	float _current_radius;
 	float _power;
-	uu::u32 _idPlayer;
+
 };
 
 //**********************************************************************************************************************
@@ -146,7 +141,6 @@ public:
 
 public:
 	uu::u32 _id;
-	
 	float _x;
 	float _y;
 };

@@ -146,19 +146,14 @@ uu::StringId CreateBombRequest::dataContainerId = uu::StringId("CreateBombReques
 //**********************************************************************************************************************
 bool CreateBombRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr)
 {
-	if (_ReadDataContainerId(reader) == false) return false;
+	if (CreateEntityRequest::ReadFromNetworkData(reader, from_addr) == false) return false;
 
-	if (reader.ReadUInt32(_id) == false) return false;
-	if (reader.ReadFloat(_x) == false) return false;
-	if (reader.ReadFloat(_y) == false) return false;
-	
-	if (reader.ReadUInt64((uu::u64&)_timeStampExplode) == false) return false;
-
+	if (reader.ReadInt64(_explosion_time) == false) return false;
 	if (reader.ReadFloat(_explosion_radius) == false) return false;
 	if (reader.ReadFloat(_current_radius) == false) return false;
 	if (reader.ReadFloat(_power) == false) return false;
 
-	if (reader.ReadUInt32(_idPlayer) == false) return false;
+	Log(LogType::eTrace, LogModule::eDataContainer, true, "CreateBombRequest::ReadFromNetworkData _owner=%s\n", _owner.ToString());
 
 	return true;
 }
@@ -166,20 +161,14 @@ bool CreateBombRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPE
 //**********************************************************************************************************************
 bool CreateBombRequest::WriteToNetworkData(uu::Writer& writer)
 {
-	if (_WriteDataContainerId(writer) == false) return false;
+	if (CreateEntityRequest::WriteToNetworkData(writer) == false) return false;
 
-	if (writer.WriteUInt32(_id) == false) return false;
-	if (writer.WriteFloat(_x) == false) return false;
-	if (writer.WriteFloat(_y) == false) return false;
-
-
-	if (writer.WriteUInt64(_timeStampExplode) == false) return false;
-	
+	if (writer.WriteInt64(_explosion_time) == false) return false;
 	if (writer.WriteFloat(_explosion_radius) == false) return false;
 	if (writer.WriteFloat(_current_radius) == false) return false;
 	if (writer.WriteFloat(_power) == false) return false;
 
-	if (writer.WriteUInt32(_idPlayer) == false) return false;
+	Log(LogType::eTrace, LogModule::eDataContainer, true, "CreateBombRequest::WriteToNetworkData _owner=%s\n", _owner.ToString());
 
 	return true;
 }
@@ -259,7 +248,6 @@ bool AttackObjectRequest::WriteToNetworkData(uu::Writer& writer)
 	if (_WriteDataContainerId(writer) == false) return false;
 
 	if (writer.WriteUInt32(_id_attacker) == false) return false;
-	
 	if (writer.WriteUInt32(_id_to_attack) == false) return false;
 
 	return true;

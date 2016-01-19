@@ -66,12 +66,6 @@ public:
 	void DispatchLocalEntityAttack(Character const& character, uu::u32 id_to_attack);
 	void DispatchLocalEntityHit(Character const& character, uu::u32 attacker, float hit_value);
 
-	/////////////////////////////////////////////////////////Ajout//////////////////////////////////////////////////////////////////////
-	void DispatchLocalEntityCreateBomb(Bomb const& bomb, uu::u32 playerId);
-
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void DispatchLocalEntitiesToClient(SessionClient const& client);
 	void DispatchCreateEntityToClient(Entity const& entity, SessionClient const& client);
 	void DispatchCreateEntityToSessionClients(Entity const& entity);

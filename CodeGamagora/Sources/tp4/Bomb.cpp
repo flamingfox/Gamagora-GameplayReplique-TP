@@ -21,6 +21,37 @@ Bomb::Bomb() : Item("Bomb"),
 	_SetState(ticks);
 }
 
+uu::network::DataContainer* Bomb::CreateContainer() const
+{
+	return new CreateBombRequest();
+}
+
+void Bomb::ReadFromContainer(uu::network::DataContainer const& container)
+{
+	Item::ReadFromContainer(container);
+
+	CreateBombRequest const& data = dynamic_cast<CreateBombRequest const&>(container);
+
+	_current_radius = data._current_radius;
+	_explosion_radius = data._explosion_radius;
+	_explosion_time = data._explosion_time;
+	_current_radius = data._current_radius;
+	_power = data._power;
+}
+
+void Bomb::WriteToContainer(uu::network::DataContainer& container) const
+{
+	Item::WriteToContainer(container);
+
+	CreateBombRequest& data = dynamic_cast<CreateBombRequest&>(container);
+
+	data._current_radius = _current_radius;
+	data._explosion_radius = _explosion_radius;
+	data._explosion_time = _explosion_time;
+	data._current_radius = _current_radius;
+	data._power = _power;
+}
+
 bool Bomb::_SetState(State new_state)
 {
 	if (_state != new_state)
