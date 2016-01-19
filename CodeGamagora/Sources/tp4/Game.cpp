@@ -348,6 +348,13 @@ bool Game::Initialize()
 	_session_service.AddSessionListener(this);
 	_session_service.AddNetworkDataListener(this);
 
+	_damageManager = nullptr;
+
+	if(GetLocalSessionClient().IsHost()){
+		_damageManager = new DamageManager();
+		_entities.push_back(_damageManager);
+	}
+
 	return true;
 }
 
@@ -810,6 +817,12 @@ bool Game::OnNetworkData(uu::u32 dataContainerId, void* bytes, int size, uu::net
 		return true;
 	}
 
+	if (ScoreObjectRequest::dataContainerId == dataContainerId)
+	{
+		_OnScoreObjectRequest(bytes, size, from_addr);
+		return true;
+	}
+
 
 
 	return false;
@@ -999,6 +1012,27 @@ void Game::_OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint co
 	if (entity != nullptr)
 	{
 		entity->Hit(request._id_attacker, request._hit_value);
+	}
+}
+
+//**********************************************************************************************************************
+void Game::_OnScoreObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr)
+{
+	Log(LogType::eTrace, LogModule::eGame, true, "ScoreObjectRequest received from %s\n", from_addr.ToString());
+
+	uu::Reader reader(bytes, size, uu::Endianness::eNetworkEndian);
+	ScoreObjectRequest request;
+
+	if (request.ReadFromNetworkData(reader, from_addr) == false)
+	{
+		Log(LogType::eError, LogModule::eGame, true, "unable to read datacontainer ScoreObjectRequest\n");
+		return;
+	}
+
+	Player* entity = dynamic_cast<Player*>(GetEntity(request._id_attacker));
+	if (entity != nullptr)
+	{
+		entity->addScore(request._score_value);
 	}
 }
 
@@ -1253,6 +1287,23 @@ void Game::DispatchLocalEntityHit(Character const& character, uu::u32 attacker, 
 	request._id_attacker = attacker;
 	request._id_to_hit = character._id;
 	request._hit_value = hit_value;
+
+	SendDataContainerToSessionClients(request);
+}
+
+//**********************************************************************************************************************
+void Game::DispatchLocalEntityScore(uu::u32 attackerId, float gainPoint){
+
+	Log(LogType::eTrace, LogModule::eGame, true, "Game::DispatchLocalEntityScore(%lu): attacker=%lu\n", gainPoint, attackerId);
+
+	/*
+	if ( character.IsMaster() == false)
+		return;
+	*/
+
+	ScoreObjectRequest request;
+	request._id_attacker = attackerId;
+	request._score_value = gainPoint;
 
 	SendDataContainerToSessionClients(request);
 }

@@ -196,3 +196,19 @@ public:
 	uu::u32 _id_to_hit;
 	float _hit_value;
 };
+//**********************************************************************************************************************
+class ScoreObjectRequest: public uu::network::DataContainer
+{
+public:
+	static uu::StringId dataContainerId;
+
+public:
+	//uu::network::DataContainer overrides
+	virtual uu::StringId const& GetDataContainerId() const { return dataContainerId; }
+	virtual bool ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr);
+	virtual bool WriteToNetworkData(uu::Writer& writer);
+
+public:
+	uu::u32 _id_attacker;
+	float _score_value;
+};

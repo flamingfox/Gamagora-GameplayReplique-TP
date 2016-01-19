@@ -98,6 +98,12 @@
     <ClCompile Include="..\Sources\tp4\Entity.cpp">
       <Filter>Game\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\tp4\Damage.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\tp4\DamageManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\tp4\Game.h">
@@ -210,6 +216,12 @@
     </ClInclude>
     <ClInclude Include="..\Sources\tp4\Item.h">
       <Filter>Game\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\tp4\DamageManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\tp4\Damage.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -412,8 +412,13 @@ void Character::Attack(uu::u32 id_to_attack)
 //**********************************************************************************************************************
 void Character::Hit(uu::u32 id_attacker, float hit_value)
 {
-	if (IsDead() == true)
+	if (IsDead() == true){
+		
+		if(Game::GetInstance().getDamageManager() != nullptr)
+			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker, this->GetId());
+
 		return;
+	}
 
 	if (id_attacker == _id)
 		return;
@@ -432,6 +437,9 @@ void Character::Hit(uu::u32 id_attacker, float hit_value)
 	_current_values._live -= hit_value;
 	if (_current_values._live <= 0)
 	{
+		if(Game::GetInstance().getDamageManager() != nullptr)
+			Game::GetInstance().getDamageManager()->addDamage(id_attacker, this->GetId());
+		
 		_current_values._live = 0;
 		_SetState(dead);
 	}

@@ -26,11 +26,13 @@ public:
 
 	void    InvokeLocalCreature();
 	Bomb*   SpawnLocalBomb();
+	void	addScore(float gain);
 
 protected:
 	uu::u32 _bomb_id;
 	uu::u32 _enemy_id;
 	uu::u32 _coins;
+	float _score;	//player score
 
 	//Entity overrides
 	virtual void ReadFromContainer(uu::network::DataContainer const& container);

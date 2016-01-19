@@ -129,6 +129,12 @@ Bomb* Player::SpawnLocalBomb()
 	return bomb;
 }
 
+
+void Player::addScore(float gain)
+{
+	this->_score += gain;
+}
+
 //**********************************************************************************************************************
 MageBlue::MageBlue() : Player("MageBlue")
 {

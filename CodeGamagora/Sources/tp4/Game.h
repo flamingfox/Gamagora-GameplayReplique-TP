@@ -18,6 +18,7 @@ class RenderWindow;
 #include "World.h"
 #include "Character.h"
 #include "GameObjects.h"
+#include "DamageManager.h"
 
 //**********************************************************************************************************************
 class Game: public Singleton<Game>, public INetworkDataListener, public ISessionListener
@@ -42,6 +43,9 @@ public:
 	bool Terminate();
 
 	State GetState() const { return _state; }
+	
+	DamageManager* getDamageManager() const { return _damageManager; }
+
 
 	Entity* GetEntity(uu::u32 id) const;
 	void GetEntitiesListFiltered(std::vector<Entity*>& list, uu::StringId const& type, bool bLocal, uu::u32 exclude_id) const;
@@ -65,6 +69,7 @@ public:
 	void DispatchLocalEntityFollow(Character const& character, uu::u32 id_to_follow);
 	void DispatchLocalEntityAttack(Character const& character, uu::u32 id_to_attack);
 	void DispatchLocalEntityHit(Character const& character, uu::u32 attacker, float hit_value);
+	void DispatchLocalEntityScore(uu::u32 attacker, float gainPoint);
 
 	void DispatchLocalEntitiesToClient(SessionClient const& client);
 	void DispatchCreateEntityToClient(Entity const& entity, SessionClient const& client);
@@ -105,6 +110,7 @@ protected:
 	void _OnFollowObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnAttackObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 	void _OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
+	void _OnScoreObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr);
 
 	// SFML stuff
 	void _OnDraw(sf::RenderTarget& target);
@@ -178,4 +184,6 @@ protected:
 
 	// simple timers
 	std::list<Timer*> _timers;
+
+	DamageManager* _damageManager;
 };

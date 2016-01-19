@@ -25,6 +25,8 @@
     <ClCompile Include="..\Sources\tp4\Character.cpp" />
     <ClCompile Include="..\Sources\tp4\ClientService.cpp" />
     <ClCompile Include="..\Sources\tp4\crc32.cpp" />
+    <ClCompile Include="..\Sources\tp4\Damage.cpp" />
+    <ClCompile Include="..\Sources\tp4\DamageManager.cpp" />
     <ClCompile Include="..\Sources\tp4\draw_ui.cpp" />
     <ClCompile Include="..\Sources\tp4\draw_utils.cpp" />
     <ClCompile Include="..\Sources\tp4\endianness.cpp" />
@@ -59,6 +61,8 @@
     <ClInclude Include="..\Sources\tp4\Bomb.h" />
     <ClInclude Include="..\Sources\tp4\Character.h" />
     <ClInclude Include="..\Sources\tp4\ClientService.h" />
+    <ClInclude Include="..\Sources\tp4\Damage.h" />
+    <ClInclude Include="..\Sources\tp4\DamageManager.h" />
     <ClInclude Include="..\Sources\tp4\DataContainer.h" />
     <ClInclude Include="..\Sources\tp4\draw_ui.h" />
     <ClInclude Include="..\Sources\tp4\draw_utils.h" />

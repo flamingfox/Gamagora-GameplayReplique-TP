@@ -280,3 +280,29 @@ bool HitObjectRequest::WriteToNetworkData(uu::Writer& writer)
 
 	return true;
 }
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+uu::StringId ScoreObjectRequest::dataContainerId = uu::StringId("ScoreObjectRequest");
+
+//**********************************************************************************************************************
+bool ScoreObjectRequest::ReadFromNetworkData(uu::Reader& reader, uu::network::IPEndPoint const& from_addr)
+{
+	if (_ReadDataContainerId(reader) == false) return false;
+
+	if (reader.ReadUInt32(_id_attacker) == false) return false;
+	if (reader.ReadFloat(_score_value) == false) return false;
+
+	return true;
+}
+
+//**********************************************************************************************************************
+bool ScoreObjectRequest::WriteToNetworkData(uu::Writer& writer)
+{
+	if (_WriteDataContainerId(writer) == false) return false;
+
+	if (writer.WriteUInt32(_id_attacker) == false) return false;
+	if (writer.WriteFloat(_score_value) == false) return false;
+
+	return true;
+}
