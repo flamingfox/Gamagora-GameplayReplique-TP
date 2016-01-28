@@ -1,7 +1,7 @@
 #include "DamageManager.h"
 #include "Game.h"
 
-DamageManager::DamageManager(void) : Item(""), timeDispach(450), pointDispach(10);
+DamageManager::DamageManager(void) : Item(""), timeDispach(1000), pointDispach(10)
 {
 	
 }
@@ -58,10 +58,10 @@ void DamageManager::makeScoreDispatch(const Damage& damage) const{
 	float pointToDispatch = pointDispach / damage.getAttackersId().size();
 
 	for(uu::u32& attackerId : damage.getAttackersId()){
-		//interpréter l'info par soit même
-		Game::GetInstance().transmetPoints(attackerId, pointToDispatch);
-
 		//envoyer l'info à tous les autres.
 		Game::GetInstance().DispatchLocalEntityScore(attackerId, pointToDispatch);
+
+		//interpréter l'info par soit même
+		Game::GetInstance().transmetPoints(attackerId, pointToDispatch);
 	}
 }

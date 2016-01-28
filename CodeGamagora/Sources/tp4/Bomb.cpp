@@ -37,6 +37,7 @@ void Bomb::ReadFromContainer(uu::network::DataContainer const& container)
 	_explosion_time = data._explosion_time;
 	_current_radius = data._current_radius;
 	_power = data._power;
+	idPlayer = data._idPlayer;
 }
 
 void Bomb::WriteToContainer(uu::network::DataContainer& container) const
@@ -50,6 +51,7 @@ void Bomb::WriteToContainer(uu::network::DataContainer& container) const
 	data._explosion_time = _explosion_time;
 	data._current_radius = _current_radius;
 	data._power = _power;
+	data._idPlayer = idPlayer;
 }
 
 bool Bomb::_SetState(State new_state)
