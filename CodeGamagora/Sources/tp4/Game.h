@@ -79,6 +79,10 @@ public:
 	void RemoveWidget(Widget& widget);
 	Widget* GetWidget(uu::u32 id) const;
 
+
+	void transmetPoints(uu::u32 idAttacker, float _score_value);
+
+
 protected:
 	// state machine management
 	State _state;
@@ -151,6 +155,7 @@ protected:
 	void _ManageTimers();
 	void _CleanTimers();
 	void _OnTimer(Timer& timer);
+
 
 protected:
 	time_t _time_now;

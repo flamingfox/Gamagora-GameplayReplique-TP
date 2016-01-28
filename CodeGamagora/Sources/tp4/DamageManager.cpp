@@ -47,7 +47,10 @@ void DamageManager::makeScoreDispatch(const Damage& damage) const{
 	float pointToDispatch = 10.f / damage.getAttackersId().size();
 
 	for(uu::u32& attackerId : damage.getAttackersId()){
+		//interpréter l'info par soit même
+		Game::GetInstance().transmetPoints(attackerId, pointToDispatch);
+
+		//envoyer l'info à tous les autres.
 		Game::GetInstance().DispatchLocalEntityScore(attackerId, pointToDispatch);
-		
 	}
 }

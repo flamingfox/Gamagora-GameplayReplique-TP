@@ -1011,6 +1011,24 @@ void Game::_OnHitObjectRequest(void* bytes, int size, uu::network::IPEndPoint co
 }
 
 //**********************************************************************************************************************
+
+void Game::transmetPoints(uu::u32 idAttacker, float _score_value)
+{
+	Bomb* bomb = dynamic_cast<Bomb*>(GetEntity(idAttacker));
+	if (bomb != nullptr){
+		idAttacker = bomb->idPlayer;
+	}
+
+	Player* entity = dynamic_cast<Player*>(GetEntity(idAttacker));
+	if (entity != nullptr)
+	{
+		entity->addScore(_score_value);
+		if(entity->IsMaster()){
+			Log(LogType::eError, LogModule::eGame, true, "\n\n\n\n\n !!!!! Your score is %f !!!!! \n\n\n\n\n", entity->getScore());
+		}
+	}
+}
+
 void Game::_OnScoreObjectRequest(void* bytes, int size, uu::network::IPEndPoint const& from_addr)
 {
 	Log(LogType::eTrace, LogModule::eGame, true, "ScoreObjectRequest received from %s\n", from_addr.ToString());
@@ -1024,21 +1042,7 @@ void Game::_OnScoreObjectRequest(void* bytes, int size, uu::network::IPEndPoint 
 		return;
 	}
 
-	uu::u32 idAttacker = request._id_attacker;
-
-	Bomb* bomb = dynamic_cast<Bomb*>(GetEntity(idAttacker));
-	if (bomb != nullptr){
-		idAttacker = bomb->idPlayer;
-	}
-
-	Player* entity = dynamic_cast<Player*>(GetEntity(idAttacker));
-	if (entity != nullptr)
-	{
-		entity->addScore(request._score_value);
-		if(entity->IsMaster()){
-			Log(LogType::eError, LogModule::eGame, true, "\n\n\n\n\n !!!!! Your score is %f !!!!! \n\n\n\n\n", entity->getScore());
-		}
-	}
+	transmetPoints(request._id_attacker, request._score_value);
 }
 
 //**********************************************************************************************************************
