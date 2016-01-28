@@ -12,6 +12,9 @@ class DamageManager	: public Item
 private :
 	std::vector<Damage> damages;
 
+	float timeDispach;	//temps entre le moment où on reçoit l'information de la mort d'un Character et le moment où les points sont partagés.
+	float pointDispach;	//points à partager au moment du partage pour une mort.
+
 public:	
 	DamageManager(void);
 	//~DamageManager(void);
