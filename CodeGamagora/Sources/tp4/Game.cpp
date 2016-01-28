@@ -145,7 +145,7 @@ Enemy* Game::CreateLocalEnemy()
 	char tmp[256];
 	sprintf_s(tmp, sizeof(tmp), "enemy_%d", Game::_entity_id + 1);
 
-	uu::StringId const type = 0; //GetRandomEnemyType();
+	uu::StringId const type = GetRandomEnemyType();
 
 	Entity* entity;
 	entity = CreateLocalEntity(type, tmp);
@@ -1055,6 +1055,11 @@ void Game::_OnUI(Widget& widget, sf::Event::MouseButtonEvent const& event)
 		// ici on crée la session et on est le host		
 		_damageManager = new DamageManager();
 		_entities.push_back(_damageManager);
+
+		//créer un NPC
+		//_entities.push_back((Character*) new DarkWarrior()); 
+		for(int i = 0;	i < 5;	i++)
+			_entities.push_back(CreateLocalEnemy());
 
 		clean = _session_service.CreateSession();
 	}
