@@ -410,17 +410,18 @@ void Character::Attack(uu::u32 id_to_attack)
 }
 
 //**********************************************************************************************************************
+//un character subit une attaque et doit perdre des points de vie.
 void Character::Hit(uu::u32 id_attacker, float hit_value)
 {
-	if (IsDead() == true){
-		
-		if(Game::GetInstance().getDamageManager() != nullptr)
-			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker, this->GetId());
+	if (IsDead() == true)	//si le character est déjà mort
+	{	
+		if(Game::GetInstance().getDamageManager() != nullptr)	//si on est l'hôte
+			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker, this->GetId());	//on ajoute cet attaquant au personne qui doit recevoir les points partagés. Si cette personne n'est pas dans la liste des personnes décédées, c'est qu'il est mort depuis trop longtemps et la répartition a déjà été faite.
 
 		return;
 	}
 
-	if (id_attacker == _id)
+	if (id_attacker == _id)	//la personne ne peut pas s'attaquer lui-même, sauf avec une bombe (id différent). 
 		return;
 
 	Entity* attacker = dynamic_cast<Entity*>(Game::GetInstance().GetEntity(id_attacker));
@@ -431,14 +432,14 @@ void Character::Hit(uu::u32 id_attacker, float hit_value)
 
 	if (attacker->IsMaster())
 	{
-		Game::GetInstance().DispatchLocalEntityHit(*this, id_attacker, hit_value);
+		Game::GetInstance().DispatchLocalEntityHit(*this, id_attacker, hit_value);	//l'information de la perte de points de vie est transmise aux autres joueurs.
 	}
 
 	_current_values._live -= hit_value;
-	if (_current_values._live <= 0)
+	if (_current_values._live <= 0)	//s'il est tué sur cette attaque,
 	{
 		if(Game::GetInstance().getDamageManager() != nullptr)
-			Game::GetInstance().getDamageManager()->addDamage(id_attacker, this->GetId());
+			Game::GetInstance().getDamageManager()->addDamage(id_attacker, this->GetId());	//on crée l'information qu'il est mort et que les points doivent être partagé avec lui.
 		
 		_current_values._live = 0;
 		_SetState(dead);
