@@ -1056,12 +1056,15 @@ void Game::_OnUI(Widget& widget, sf::Event::MouseButtonEvent const& event)
 		_damageManager = new DamageManager();
 		_entities.push_back(_damageManager);
 
-		//créer un NPC
-		//_entities.push_back((Character*) new DarkWarrior()); 
-		for(int i = 0;	i < 5;	i++)
-			_entities.push_back(CreateLocalEnemy());
+		
 
 		clean = _session_service.CreateSession();
+
+		//créer un NPC
+		//_entities.push_back((Character*) new DarkWarrior()); 
+
+		for(int i = 0;	i < 5;	i++)	
+			_AddEntity(CreateLocalEnemy());	//duplique en double à l'initialisation du player.
 	}
 	else
 	{
