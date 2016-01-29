@@ -1,7 +1,7 @@
 #include "DamageManager.h"
 #include "Game.h"
 
-DamageManager::DamageManager(void) : Item(""), timeDispach(1000), pointDispach(10)
+DamageManager::DamageManager(void) : Item(""), timeDispach(0.45), pointDispach(10)
 {
 	
 }
@@ -23,7 +23,7 @@ void DamageManager::addDamage(uu::u32 attacker, uu::u32 targetId){
 		}
 	}
 	if(i == damages.size())		//sinon, on crée la donnée pour dispaché les points dans
-		damages.push_back(Damage(attacker, targetId, uu::Time::GetSynchTime()+timeDispach));
+		damages.push_back(Damage(attacker, targetId, uu::Time::GetSynchTime()+450));	//timeDispach));	//on a l'impression que ça met 450 SECONDES quand on met la variable timeDispach
 
 }
 
