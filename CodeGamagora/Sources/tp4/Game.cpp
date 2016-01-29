@@ -915,6 +915,9 @@ void Game::_OnCreateBombRequest(void* bytes, int size, uu::network::IPEndPoint c
 	{
 		entity->ReadFromContainer(request);
 		entity->SetPosition(request._x, request._y);
+		/*Bomb* bomb = dynamic_cast<Bomb*>(entity);
+		if(bomb != nullptr)
+			bomb->idPlayer = request._idPlayer;*/
 	}
 }
 

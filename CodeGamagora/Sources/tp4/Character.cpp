@@ -413,24 +413,28 @@ void Character::Attack(uu::u32 id_to_attack)
 //un character subit une attaque et doit perdre des points de vie.
 void Character::Hit(uu::u32 id_attacker, float hit_value)
 {
+	Entity* attacker = dynamic_cast<Entity*>(Game::GetInstance().GetEntity(id_attacker));
+	if (attacker == nullptr)
+		return;
+	Bomb* bomb = dynamic_cast<Bomb*>(attacker);
+	uu::u32 id_attacker_damage_manager = (bomb == nullptr	?	id_attacker	:	bomb->idPlayer);
+
 	if (IsDead() == true)	//si le character est déjà mort
 	{	
 		if(Game::GetInstance().getDamageManager() != nullptr)	//si on est l'hôte
-			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker, this->GetId());	//on ajoute cet attaquant au personne qui doit recevoir les points partagés. Si cette personne n'est pas dans la liste des personnes décédées, c'est qu'il est mort depuis trop longtemps et la répartition a déjà été faite.
-
+			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker_damage_manager, this->GetId());	//on ajoute cet attaquant au personne qui doit recevoir les points partagés. Si cette personne n'est pas dans la liste des personnes décédées, c'est qu'il est mort depuis trop longtemps et la répartition a déjà été faite.
 		return;
 	}
+
+
 
 	if (id_attacker == _id)	//la personne ne peut pas s'attaquer lui-même, sauf avec une bombe (id différent). 
 		return;
 
-	Entity* attacker = dynamic_cast<Entity*>(Game::GetInstance().GetEntity(id_attacker));
-	if (attacker == nullptr)
-		return;
 
 	Log(LogType::eTrace, LogModule::eGame, true, "Character::Hit(%lu,%f): entity=%s\n", id_attacker, hit_value, ToString());
 
-	if (attacker->IsMaster())
+	if ((attacker->IsMaster() && bomb == nullptr) || (bomb != nullptr && Game::GetInstance().getDamageManager() != nullptr))
 	{
 		Game::GetInstance().DispatchLocalEntityHit(*this, id_attacker, hit_value);	//l'information de la perte de points de vie est transmise aux autres joueurs.
 	}
@@ -439,7 +443,7 @@ void Character::Hit(uu::u32 id_attacker, float hit_value)
 	if (_current_values._live <= 0)	//s'il est tué sur cette attaque,
 	{
 		if(Game::GetInstance().getDamageManager() != nullptr)
-			Game::GetInstance().getDamageManager()->addDamage(id_attacker, this->GetId());	//on crée l'information qu'il est mort et que les points doivent être partagé avec lui.
+			Game::GetInstance().getDamageManager()->addDamage(id_attacker_damage_manager, this->GetId());	//on crée l'information qu'il est mort et que les points doivent être partagé avec lui.
 		
 		_current_values._live = 0;
 		_SetState(dead);

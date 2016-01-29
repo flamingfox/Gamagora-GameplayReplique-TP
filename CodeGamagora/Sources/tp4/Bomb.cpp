@@ -117,14 +117,17 @@ void Bomb::_RefreshTicks(time_t time_now)
 	}
 }
 
+std::vector<Character*> touches;
+
 void Bomb::_RefreshExplode(time_t time_now)
 {
 	_current_radius += 1.5f;
 	if (_current_radius > _explosion_radius)
 	{
 		_SetState(dead);
+		touches.clear();
 	}
-	else
+	else if(Game::GetInstance().getDamageManager() != nullptr)
 	{
 		std::vector<Entity*> list;
 		Game::GetInstance().GetEntitiesList(list, Character::type, GetId());
@@ -133,13 +136,17 @@ void Bomb::_RefreshExplode(time_t time_now)
 			sf::Vector2f position;
 			for (auto it = list.begin(); it != list.end(); it++)
 			{
-				Character& ch = dynamic_cast<Character&>(*(*it));
-				ch.GetPosition(position);
+				Character* ch = dynamic_cast<Character*>((*it));
+				ch->GetPosition(position);
 				if (IsInExplosionRange(position) == true)
 				{
-					if (ch.IsDead() == false)
+					int i = 0;
+					while(i < touches.size() && touches[i] != ch) //on vérifie que cette bombe n'a pas déjà touchée ce character.
+						i++;
+					if(i == touches.size())
 					{
-						ch.Hit(GetId(), _power);
+						ch->Hit(GetId(), _power);
+						touches.push_back(ch);
 					}
 				}
 			}
