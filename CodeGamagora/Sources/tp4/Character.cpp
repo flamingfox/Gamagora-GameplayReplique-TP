@@ -422,7 +422,7 @@ void Character::Hit(uu::u32 id_attacker, float hit_value)
 	if (IsDead() == true)	//si le character est déjà mort
 	{	
 		if(Game::GetInstance().getDamageManager() != nullptr)	//si on est l'hôte
-			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker_damage_manager, this->GetId());	//on ajoute cet attaquant au personne qui doit recevoir les points partagés. Si cette personne n'est pas dans la liste des personnes décédées, c'est qu'il est mort depuis trop longtemps et la répartition a déjà été faite.
+			Game::GetInstance().getDamageManager()->addAttackerInDamage(id_attacker_damage_manager, this->GetId());	//on ajoute cet attaquant aux personnes qui doivent recevoir les points partagés. Si cette personne n'est pas dans la liste des personnes décédées, c'est qu'il est mort depuis trop longtemps et la répartition a déjà été faite.
 		return;
 	}
 

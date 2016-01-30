@@ -14,7 +14,7 @@ DamageManager::~DamageManager(void)
 //dans le cas où le personnage cible viens de se faire tuer
 void DamageManager::addDamage(uu::u32 attacker, uu::u32 targetId){
 
-	int i;
+	unsigned int i;
 	for(i = 0;	i < damages.size();	i++)	//on vérifie d'abord que le personnage target n'est pas déjà dans la liste des nouveaux morts.
 	{
 		if(damages[i].getTargetId() == targetId)		{
@@ -23,7 +23,7 @@ void DamageManager::addDamage(uu::u32 attacker, uu::u32 targetId){
 		}
 	}
 	//sinon, on crée la donnée pour dispaché les points dans
-	damages.push_back(Damage(attacker, targetId, uu::Time::GetSynchTime()+2000));	//timeDispach));	//on a l'impression que ça met 450 SECONDES quand on met la variable timeDispach
+	damages.push_back(Damage(attacker, targetId, uu::Time::GetSynchTime()+450));	//timeDispach));	//on a l'impression que ça met 450 SECONDES quand on met la variable timeDispach
 
 }
 
@@ -42,9 +42,9 @@ void DamageManager::addAttackerInDamage(uu::u32 attacker, uu::u32 targetId){
 
 bool DamageManager::Update(time_t time_now)
 {
-	for(int i = damages.size()-1;	i >= 0;	i--)
+	for(int i = damages.size()-1;	i >= 0;	i--)	//on parcours la liste des personnes mortes depuis pas longtemps (<450ms)
 	{
-		if(damages[i].getTimeStamp()<=time_now){
+		if(damages[i].getTimeStamp()<=time_now){	//si on a attend le timestamp, on partage les points entre les personnes qui l'on tué.
 			makeScoreDispatch(damages[i]);
 			//suppresion damage puisque décision prise
 			damages.erase(damages.begin()+i);

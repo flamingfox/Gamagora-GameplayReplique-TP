@@ -127,7 +127,7 @@ void Bomb::_RefreshExplode(time_t time_now)
 		_SetState(dead);
 		touches.clear();
 	}
-	else if(Game::GetInstance().getDamageManager() != nullptr)
+	else if(Game::GetInstance().getDamageManager() != nullptr)		//seul la bombe de l'hôte fait des dégats. Les bombes sur les autres clients font juste l'animation d'explosion.
 	{
 		std::vector<Entity*> list;
 		Game::GetInstance().GetEntitiesList(list, Character::type, GetId());
@@ -140,8 +140,8 @@ void Bomb::_RefreshExplode(time_t time_now)
 				ch->GetPosition(position);
 				if (IsInExplosionRange(position) == true)
 				{
-					int i = 0;
-					while(i < touches.size() && touches[i] != ch) //on vérifie que cette bombe n'a pas déjà touchée ce character.
+					unsigned int i = 0;
+					while(i < touches.size() && touches[i] != ch) //on vérifie que cette bombe n'a pas déjà touchée ce character, car cette première touche ce dernier à chaque augmmentation du _current_radius.
 						i++;
 					if(i == touches.size())
 					{
